@@ -257,6 +257,15 @@
             text-align: center;
         }
 
+        .metric-card.clickable-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metric-card.clickable-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+
         .metric-card h3 {
             font-size: 2em;
             margin-bottom: 10px;
@@ -503,26 +512,26 @@
             <div class="section">
                 <h2>🚀 성장 방법</h2>
                 <div class="metric-grid">
-                    <div class="metric-card">
+                    <div class="metric-card clickable-card" onclick="scrollToSection('growth-method-1')" style="cursor: pointer;">
                         <h3>1</h3>
                         <p>연차별 역량 기준</p>
                     </div>
-                    <div class="metric-card">
+                    <div class="metric-card clickable-card" onclick="scrollToSection('growth-method-2')" style="cursor: pointer;">
                         <h3>2</h3>
                         <p>분기별 성장 목표</p>
                     </div>
-                    <div class="metric-card">
+                    <div class="metric-card clickable-card" onclick="scrollToSection('growth-method-3')" style="cursor: pointer;">
                         <h3>3</h3>
                         <p>기술 자산화</p>
                     </div>
-                    <div class="metric-card">
+                    <div class="metric-card clickable-card" onclick="scrollToSection('growth-method-4')" style="cursor: pointer;">
                         <h3>4</h3>
                         <p>멘토링</p>
                     </div>
                 </div>
                 
                 <!-- 연차별 역량 기준 상세 -->
-                <div class="level-card" style="margin-top: 30px;">
+                <div id="growth-method-1" class="level-card" style="margin-top: 30px;">
                     <h3>1️⃣ 연차별 역량 기준</h3>
                     <ul class="checklist">
                         <li>L1~L5 레벨별 명확한 역량 기준 정의 (기술, 문제 해결, 협업, 기술 자산화)</li>
@@ -534,7 +543,7 @@
                 </div>
                 
                 <!-- 분기별 성장 목표 상세 -->
-                <div class="level-card" style="margin-top: 30px;">
+                <div id="growth-method-2" class="level-card" style="margin-top: 30px;">
                     <h3>2️⃣ 분기별 성장 목표</h3>
                     <ul class="checklist">
                         <li>분기 시작 시 개인별 성장 목표 설정 (SMART 원칙 적용)</li>
@@ -546,7 +555,7 @@
                 </div>
                 
                 <!-- 기술 자산화 상세 -->
-                <div class="level-card" style="margin-top: 30px;">
+                <div id="growth-method-3" class="level-card" style="margin-top: 30px;">
                     <h3>3️⃣ 기술 자산화</h3>
                     <ul class="checklist">
                         <li>프로젝트 경험, 문제 해결 사례를 문서화하여 지식 공유</li>
@@ -558,7 +567,7 @@
                 </div>
                 
                 <!-- 멘토링 상세 -->
-                <div class="level-card" style="margin-top: 30px;">
+                <div id="growth-method-4" class="level-card" style="margin-top: 30px;">
                     <h3>4️⃣ 멘토링</h3>
                     <ul class="checklist">
                         <li>정기적인 1:1 면담을 통한 개인별 성장 지원 (분기 1회 권장)</li>
@@ -1064,6 +1073,17 @@
         window.resetForm = resetForm;
         window.editMember = editMember;
         window.deleteMember = removeMember;
+        
+        // 섹션으로 스크롤 이동 함수
+        window.scrollToSection = function(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+        };
         
         // 애플리케이션 초기화
         init();
