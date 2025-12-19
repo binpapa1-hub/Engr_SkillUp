@@ -471,13 +471,13 @@
         </header>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="handleTabChange('overview')">개요</button>
-            <button class="nav-tab" onclick="handleTabChange('members')">부서원 관리</button>
-            <button class="nav-tab" onclick="handleTabChange('levels')">연차별 역량</button>
-            <button class="nav-tab" onclick="handleTabChange('archetypes')">성향 트랙</button>
-            <button class="nav-tab" onclick="handleTabChange('mentoring')">면담 가이드</button>
-            <button class="nav-tab" onclick="handleTabChange('tracks')">트랙 비교</button>
-            <button class="nav-tab" onclick="handleTabChange('evaluation')">평가 기준</button>
+            <button class="nav-tab active" data-tab="overview" onclick="handleTabChange('overview')">개요</button>
+            <button class="nav-tab" data-tab="members" onclick="handleTabChange('members')">부서원 관리</button>
+            <button class="nav-tab" data-tab="levels" onclick="handleTabChange('levels')">연차별 역량</button>
+            <button class="nav-tab" data-tab="archetypes" onclick="handleTabChange('archetypes')">성향 트랙</button>
+            <button class="nav-tab" data-tab="mentoring" onclick="handleTabChange('mentoring')">면담 가이드</button>
+            <button class="nav-tab" data-tab="tracks" onclick="handleTabChange('tracks')">트랙 비교</button>
+            <button class="nav-tab" data-tab="evaluation" onclick="handleTabChange('evaluation')">평가 기준</button>
         </div>
 
         <!-- 개요 탭 -->
@@ -1008,8 +1008,7 @@
     </div>
 
     <script type="module">
-        import { init, saveMember, resetForm, editMember, removeMember } from './src/app.js';
-        import { handleTabChange } from './src/app.js';
+        import { init, saveMember, resetForm, editMember, removeMember, handleTabChange } from './src/app.js';
         
         // 전역 함수로 노출 (onclick 핸들러용)
         window.handleTabChange = handleTabChange;
