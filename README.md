@@ -332,19 +332,29 @@ GitHub Actions를 사용하는 경우 `.github/workflows/test.yml` 파일을 생
 - ✅ 빈 데이터셋 처리 완료
 - ✅ **131개 테스트 모두 통과** (19개 통계 테스트 추가, 100% 통과율)
 
-### 7. 향후 기능: 데이터 내보내기/가져오기 테스트 🔴
-- [ ] CSV 내보내기 실패 테스트
-  - [ ] 부서원 데이터 CSV 변환 로직
-  - [ ] 파일 다운로드 기능 검증
-  - [ ] 한글 인코딩 처리 (UTF-8 BOM)
-- [ ] JSON 내보내기 실패 테스트
-  - [ ] JSON 형식 검증
-  - [ ] 파일 다운로드 기능 검증
-- [ ] 데이터 가져오기 실패 테스트
-  - [ ] CSV 파일 파싱 로직
-  - [ ] JSON 파일 파싱 로직
-  - [ ] 잘못된 형식 파일 처리
-  - [ ] 데이터 검증 및 병합 로직
+### 7. 향후 기능: 데이터 내보내기/가져오기 테스트 ✅
+- [x] CSV 내보내기 실패 테스트
+  - [x] 부서원 데이터 CSV 변환 로직 - **✅ convertMembersToCSV() 구현 완료**
+  - [x] 파일 다운로드 기능 검증 - **✅ downloadFile() 구현 완료**
+  - [x] 한글 인코딩 처리 (UTF-8 BOM) - **✅ 완료**
+- [x] JSON 내보내기 실패 테스트
+  - [x] JSON 형식 검증 - **✅ convertMembersToJSON() 구현 완료**
+  - [x] 파일 다운로드 기능 검증 - **✅ 완료**
+- [x] 데이터 가져오기 실패 테스트
+  - [x] CSV 파일 파싱 로직 - **✅ parseCSVFile() 구현 완료**
+  - [x] JSON 파일 파싱 로직 - **✅ parseJSONFile() 구현 완료**
+  - [x] 잘못된 형식 파일 처리 - **✅ 에러 처리 완료**
+  - [x] 데이터 검증 및 병합 로직 - **✅ validateImportedData(), mergeMembers() 구현 완료**
+
+**구현 완료 요약:**
+- ✅ `convertMembersToCSV()` - 부서원 데이터 CSV 변환 (UTF-8 BOM 포함)
+- ✅ `convertMembersToJSON()` - 부서원 데이터 JSON 변환
+- ✅ `downloadFile()` - 파일 다운로드 기능
+- ✅ `parseCSVFile()` - CSV 파일 파싱 (UTF-8 BOM 처리)
+- ✅ `parseJSONFile()` - JSON 파일 파싱
+- ✅ `validateImportedData()` - 가져온 데이터 검증
+- ✅ `mergeMembers()` - 기존 데이터와 병합 (중복 제거 옵션)
+- ✅ **157개 테스트 모두 통과** (26개 내보내기/가져오기 테스트 추가, 100% 통과율)
 
 ### 8. 향후 기능: 검색 및 필터링 테스트 🔴
 - [ ] 검색 기능 실패 테스트
