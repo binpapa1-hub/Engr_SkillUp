@@ -20,7 +20,18 @@ export function showTab(tabName, clickedTab = null) {
         clickedTab.classList.add('active');
     } else {
         // data-tab 속성으로 찾기
-        const targetTab = document.querySelector(`[data-tab="${tabName}"]`);
+        let targetTab = document.querySelector(`[data-tab="${tabName}"]`);
+        
+        // data-tab이 없으면 onclick 속성에서 찾기
+        if (!targetTab) {
+            tabs.forEach(tab => {
+                const onclick = tab.getAttribute('onclick');
+                if (onclick && onclick.includes(`'${tabName}'`) || onclick && onclick.includes(`"${tabName}"`)) {
+                    targetTab = tab;
+                }
+            });
+        }
+        
         if (targetTab) {
             targetTab.classList.add('active');
         }
@@ -31,12 +42,7 @@ export function showTab(tabName, clickedTab = null) {
         targetContent.classList.add('active');
     }
     
-    // 부서원 관리 탭일 경우 목록 새로고침
-    if (tabName === 'members') {
-        if (typeof renderMemberList === 'function') {
-            renderMemberList();
-        }
-    }
+    // 부서원 관리 탭일 경우 목록 새로고침은 handleTabChange에서 처리
 }
 
 /**
