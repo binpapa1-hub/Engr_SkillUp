@@ -48,3 +48,144 @@ export function validateMember(memberData) {
     };
 }
 
+/**
+ * 부서원 객체를 생성합니다.
+ * @param {Object} memberData - 부서원 데이터
+ * @returns {Object} 생성된 부서원 객체
+ * @throws {Error} 필수 필드가 누락되었거나 데이터가 유효하지 않을 때
+ */
+export function createMember(memberData) {
+    // 필수 필드 검증
+    if (!memberData.name || memberData.name.trim() === '') {
+        throw new Error('이름은 필수 입력 항목입니다.');
+    }
+    
+    if (!memberData.primaryArchetype) {
+        throw new Error('주요 성향은 필수 선택 항목입니다.');
+    }
+    
+    if (memberData.years === undefined || memberData.years === null) {
+        throw new Error('근무 연차는 필수 입력 항목입니다.');
+    }
+    
+    if (!memberData.level) {
+        throw new Error('업무 레벨은 필수 선택 항목입니다.');
+    }
+    
+    // 데이터 타입 검증
+    if (typeof memberData.years !== 'number') {
+        throw new Error('근무 연차는 숫자여야 합니다.');
+    }
+    
+    if (!['L1', 'L2', 'L3', 'L4', 'L5'].includes(memberData.level)) {
+        throw new Error('업무 레벨은 L1~L5 중 하나여야 합니다.');
+    }
+    
+    // 범위 검증
+    if (memberData.years < 0 || memberData.years > 50) {
+        throw new Error('근무 연차는 0~50년 사이의 숫자여야 합니다.');
+    }
+    
+    // 고유 ID 생성
+    const id = memberData.id || Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    
+    return {
+        id,
+        name: memberData.name.trim(),
+        primaryArchetype: memberData.primaryArchetype,
+        secondaryArchetype: memberData.secondaryArchetype || undefined,
+        years: memberData.years,
+        level: memberData.level
+    };
+}
+
+/**
+ * 부서원을 등록합니다.
+ * @param {Object} memberData - 부서원 데이터
+ * @returns {Object} 등록된 부서원 객체
+ * @throws {Error} 데이터가 유효하지 않을 때
+ */
+export function addMember(memberData) {
+    const member = createMember(memberData);
+    const members = getMembers();
+    members.push(member);
+    saveMembers(members);
+    return member;
+}
+
+/**
+ * ID로 부서원을 조회합니다.
+ * @param {string} id - 부서원 ID
+ * @returns {Object|undefined} 부서원 객체 또는 undefined
+ */
+export function getMemberById(id) {
+    const members = getMembers();
+    return members.find(m => m.id === id);
+}
+
+/**
+ * 부서원 정보를 수정합니다.
+ * @param {string} id - 부서원 ID
+ * @param {Object} memberData - 수정할 부서원 데이터
+ * @returns {Object} 수정된 부서원 객체
+ * @throws {Error} 부서원을 찾을 수 없거나 데이터가 유효하지 않을 때
+ */
+export function updateMember(id, memberData) {
+    const members = getMembers();
+    const index = members.findIndex(m => m.id === id);
+    
+    if (index === -1) {
+        throw new Error(`ID가 ${id}인 부서원을 찾을 수 없습니다.`);
+    }
+    
+    // 기존 ID 유지하면서 데이터 업데이트
+    const updatedData = { ...memberData, id };
+    const member = createMember(updatedData);
+    
+    members[index] = member;
+    saveMembers(members);
+    
+    return member;
+}
+
+/**
+ * 부서원을 삭제합니다.
+ * @param {string} id - 부서원 ID
+ * @throws {Error} 부서원을 찾을 수 없을 때
+ */
+export function removeMember(id) {
+    const members = getMembers();
+    const index = members.findIndex(m => m.id === id);
+    
+    if (index === -1) {
+        throw new Error(`ID가 ${id}인 부서원을 찾을 수 없습니다.`);
+    }
+    
+    members.splice(index, 1);
+    saveMembers(members);
+}
+
+/**
+ * 부서원 목록을 정렬합니다.
+ * 레벨 우선 (L5 → L1), 동일 레벨 내 연차 내림차순
+ * @param {Array} members - 정렬할 부서원 배열
+ * @returns {Array} 정렬된 부서원 배열
+ */
+export function sortMembers(members) {
+    if (!members || members.length === 0) {
+        return [];
+    }
+    
+    const levelOrder = { 'L1': 1, 'L2': 2, 'L3': 3, 'L4': 4, 'L5': 5 };
+    
+    return [...members].sort((a, b) => {
+        // 레벨별 정렬 (L5 → L1)
+        const levelDiff = (levelOrder[b.level] || 0) - (levelOrder[a.level] || 0);
+        if (levelDiff !== 0) {
+            return levelDiff;
+        }
+        // 동일 레벨 내 연차 내림차순
+        return (b.years || 0) - (a.years || 0);
+    });
+}
+
