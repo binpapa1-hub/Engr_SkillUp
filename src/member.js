@@ -80,6 +80,18 @@ export function createMember(memberData) {
         throw new Error('주요 성향은 필수 선택 항목입니다.');
     }
     
+    // 성향 검증
+    const validArchetypes = [
+        '문제 해결형',
+        '설계/아키텍처형',
+        '연구/개선형',
+        '현장/운영형',
+        '리더/멘토형'
+    ];
+    if (!validArchetypes.includes(memberData.primaryArchetype)) {
+        throw new Error('유효하지 않은 성향입니다.');
+    }
+    
     if (memberData.years === undefined || memberData.years === null) {
         throw new Error('근무 연차는 필수 입력 항목입니다.');
     }

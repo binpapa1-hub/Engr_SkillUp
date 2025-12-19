@@ -420,22 +420,36 @@ GitHub Actions를 사용하는 경우 `.github/workflows/test.yml` 파일을 생
 - ✅ `matchMentoring()` - 멘토링 매칭 (자동/개별, 역멘토링 지원)
 - ✅ **245개 테스트 모두 통과** (26개 성장 경로/멘토링 테스트 추가, 100% 통과율)
 
-### 11. 에러 핸들링 및 엣지 케이스 테스트 🔴
-- [ ] 입력 검증 실패 테스트
-  - [ ] 음수 연차 입력 처리
-  - [ ] 범위 초과 연차 (50년 초과) 처리
-  - [ ] 잘못된 레벨 값 처리
-  - [ ] 잘못된 성향 값 처리
-  - [ ] 빈 문자열 이름 처리
-  - [ ] 특수문자 포함 이름 처리
-- [ ] 경계값 테스트
-  - [ ] 연차 0년 처리
-  - [ ] 연차 50년 처리
-  - [ ] 레벨 경계값 (3→4, 7→8, 12→13, 20→21년)
-  - [ ] 역량 달성률 경계값 (79% vs 80%)
-- [ ] 브라우저 호환성 실패 테스트
-  - [ ] LocalStorage 미지원 브라우저 처리
-  - [ ] JSON.parse/stringify 에러 처리
+### 11. 에러 핸들링 및 엣지 케이스 테스트 ✅
+- [x] 입력 검증 실패 테스트
+  - [x] 음수 연차 입력 처리 - **✅ handleNegativeYears() 구현 완료**
+  - [x] 범위 초과 연차 (50년 초과) 처리 - **✅ handleYearsOverLimit() 구현 완료**
+  - [x] 잘못된 레벨 값 처리 - **✅ handleInvalidLevel() 구현 완료**
+  - [x] 잘못된 성향 값 처리 - **✅ handleInvalidArchetype(), createMember()에 검증 추가 완료**
+  - [x] 빈 문자열 이름 처리 - **✅ handleEmptyName() 구현 완료**
+  - [x] 특수문자 포함 이름 처리 - **✅ handleSpecialCharacters() 구현 완료**
+- [x] 경계값 테스트
+  - [x] 연차 0년 처리 - **✅ handleBoundaryValues() 구현 완료**
+  - [x] 연차 50년 처리 - **✅ 완료**
+  - [x] 레벨 경계값 (3→4, 7→8, 12→13, 20→21년) - **✅ 완료**
+  - [x] 역량 달성률 경계값 (79% vs 80%) - **✅ checkPromotionCriteria()로 검증 완료**
+- [x] 브라우저 호환성 실패 테스트
+  - [x] LocalStorage 미지원 브라우저 처리 - **✅ checkLocalStorageSupport() 구현 완료**
+  - [x] JSON.parse/stringify 에러 처리 - **✅ safeJSONParse(), safeJSONStringify() 구현 완료**
+
+**구현 완료 요약:**
+- ✅ `validateInput()` - 통합 입력 검증
+- ✅ `handleNegativeYears()` - 음수 연차 처리
+- ✅ `handleYearsOverLimit()` - 범위 초과 연차 처리
+- ✅ `handleInvalidLevel()` - 잘못된 레벨 처리
+- ✅ `handleInvalidArchetype()` - 잘못된 성향 처리
+- ✅ `handleEmptyName()` - 빈 문자열 이름 처리
+- ✅ `handleSpecialCharacters()` - 특수문자 처리
+- ✅ `handleBoundaryValues()` - 경계값 처리
+- ✅ `checkLocalStorageSupport()` - LocalStorage 지원 확인
+- ✅ `safeJSONParse()` - 안전한 JSON 파싱
+- ✅ `safeJSONStringify()` - 안전한 JSON 직렬화
+- ✅ **274개 테스트 모두 통과** (29개 에러 핸들링 테스트 추가, 100% 통과율)
 
 ### 12. 성능 및 확장성 테스트 🔴
 - [ ] 대량 데이터 처리 실패 테스트
