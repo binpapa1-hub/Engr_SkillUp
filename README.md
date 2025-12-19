@@ -356,16 +356,24 @@ GitHub Actions를 사용하는 경우 `.github/workflows/test.yml` 파일을 생
 - ✅ `mergeMembers()` - 기존 데이터와 병합 (중복 제거 옵션)
 - ✅ **157개 테스트 모두 통과** (26개 내보내기/가져오기 테스트 추가, 100% 통과율)
 
-### 8. 향후 기능: 검색 및 필터링 테스트 🔴
-- [ ] 검색 기능 실패 테스트
-  - [ ] 이름 검색 로직 (대소문자 무시)
-  - [ ] 부분 일치 검색 검증
-  - [ ] 검색 결과 없음 처리
-- [ ] 필터링 기능 실패 테스트
-  - [ ] 레벨별 필터 (L1~L5)
-  - [ ] 성향별 필터 (Primary/Secondary)
-  - [ ] 연차 범위 필터
-  - [ ] 복합 필터 조합 검증
+### 8. 향후 기능: 검색 및 필터링 테스트 ✅
+- [x] 검색 기능 실패 테스트
+  - [x] 이름 검색 로직 (대소문자 무시) - **✅ searchMembersByName() 구현 완료**
+  - [x] 부분 일치 검색 검증 - **✅ 완료**
+  - [x] 검색 결과 없음 처리 - **✅ 완료**
+- [x] 필터링 기능 실패 테스트
+  - [x] 레벨별 필터 (L1~L5) - **✅ filterMembersByLevel() 구현 완료**
+  - [x] 성향별 필터 (Primary/Secondary) - **✅ filterMembersByArchetype() 구현 완료**
+  - [x] 연차 범위 필터 - **✅ filterMembersByYearsRange() 구현 완료**
+  - [x] 복합 필터 조합 검증 - **✅ applyFilters() 구현 완료**
+
+**구현 완료 요약:**
+- ✅ `searchMembersByName()` - 이름 검색 (부분 일치, 대소문자 무시)
+- ✅ `filterMembersByLevel()` - 레벨별 필터링 (L1~L5)
+- ✅ `filterMembersByArchetype()` - 성향별 필터링 (Primary/Secondary/Both)
+- ✅ `filterMembersByYearsRange()` - 연차 범위 필터링
+- ✅ `applyFilters()` - 복합 필터 적용 (검색 + 레벨 + 성향 + 연차)
+- ✅ **188개 테스트 모두 통과** (31개 검색/필터링 테스트 추가, 100% 통과율)
 
 ### 9. 향후 기능: 역량 평가 시스템 테스트 🔴
 - [ ] 역량 매트릭스 실패 테스트
