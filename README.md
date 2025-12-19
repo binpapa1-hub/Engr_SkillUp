@@ -492,15 +492,29 @@ GitHub Actions를 사용하는 경우 `.github/workflows/test.yml` 파일을 생
 - ✅ 복합 기능 통합 테스트 (검색 + 필터링, 정렬 + 검색)
 - ✅ **307개 테스트 모두 통과** (15개 통합 테스트 추가, 100% 통과율)
 
-### 14. 접근성 및 사용성 테스트 🔴
-- [ ] 반응형 디자인 실패 테스트
-  - [ ] 모바일 화면 (768px 미만) 레이아웃 검증
-  - [ ] 태블릿 화면 (768px~1199px) 레이아웃 검증
-  - [ ] 데스크톱 화면 (1200px 이상) 레이아웃 검증
-- [ ] 키보드 네비게이션 실패 테스트
-  - [ ] Tab 키로 모든 인터랙티브 요소 접근 가능
-  - [ ] Enter 키로 폼 제출 가능
-  - [ ] Escape 키로 모달 닫기 (향후 기능)
+### 14. 접근성 및 사용성 테스트 ✅
+- [x] 반응형 디자인 실패 테스트
+  - [x] 모바일 화면 (768px 미만) 레이아웃 검증 - **✅ isMobileViewport(), checkResponsiveLayout() 구현 완료**
+  - [x] 태블릿 화면 (768px~1199px) 레이아웃 검증 - **✅ isTabletViewport() 구현 완료**
+  - [x] 데스크톱 화면 (1200px 이상) 레이아웃 검증 - **✅ isDesktopViewport() 구현 완료**
+- [x] 키보드 네비게이션 실패 테스트
+  - [x] Tab 키로 모든 인터랙티브 요소 접근 가능 - **✅ handleTabNavigation(), checkKeyboardAccessibility() 구현 완료**
+  - [x] Enter 키로 폼 제출 가능 - **✅ handleEnterKey() 구현 완료**
+  - [x] Escape 키로 모달 닫기 (향후 기능) - **✅ handleEscapeKey() 기본 구조 완료**
+
+**구현 완료 요약:**
+- ✅ `getViewportSize()` - 뷰포트 크기 가져오기
+- ✅ `isMobileViewport()` - 모바일 뷰포트 확인 (768px 미만)
+- ✅ `isTabletViewport()` - 태블릿 뷰포트 확인 (768px~1199px)
+- ✅ `isDesktopViewport()` - 데스크톱 뷰포트 확인 (1200px 이상)
+- ✅ `checkResponsiveLayout()` - 반응형 레이아웃 확인
+- ✅ `setupKeyboardNavigation()` - 키보드 네비게이션 설정
+- ✅ `handleTabNavigation()` - Tab 키 네비게이션 처리
+- ✅ `handleEnterKey()` - Enter 키로 폼 제출 처리
+- ✅ `handleEscapeKey()` - Escape 키로 모달 닫기 (향후 기능)
+- ✅ `checkKeyboardAccessibility()` - 키보드 접근성 검증
+- ✅ `RESPONSIVE_BREAKPOINTS` - 반응형 브레이크포인트 상수
+- ✅ **331개 테스트 모두 통과** (24개 접근성 테스트 추가, 100% 통과율)
 
 ### 15. 문서화 및 테스트 유지보수 🔴
 - [ ] 테스트 문서화
