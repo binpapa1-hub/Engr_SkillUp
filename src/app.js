@@ -3,8 +3,7 @@
  * 최소 기능: 부서원 관리 통합
  */
 
-import { getMembers, addMember, updateMember, deleteMember, getMemberById } from './member.js';
-import { validateMember } from './validation.js';
+import { getMembers, addMember, updateMember, removeMember as deleteMemberFromStorage, getMemberById, validateMember } from './member.js';
 import { renderMemberList, showTab } from './ui.js';
 
 // 전역 변수
@@ -21,7 +20,7 @@ export function saveMember(event) {
         name: document.getElementById('memberName').value,
         primaryArchetype: document.getElementById('primaryArchetype').value,
         secondaryArchetype: document.getElementById('secondaryArchetype').value,
-        years: document.getElementById('years').value,
+        years: parseInt(document.getElementById('years').value, 10),
         level: document.getElementById('level').value
     };
     
@@ -86,9 +85,10 @@ export function removeMember(id) {
         return;
     }
     
-    if (deleteMember(id)) {
+    try {
+        deleteMemberFromStorage(id);
         refreshMemberList();
-    } else {
+    } catch (error) {
         alert('삭제할 항목을 찾을 수 없습니다.');
     }
 }
@@ -104,9 +104,25 @@ export function refreshMemberList() {
 /**
  * 탭 전환 핸들러
  * @param {string} tabName - 탭 이름
+ * @param {Event} event - 이벤트 객체 (선택사항)
  */
-export function handleTabChange(tabName) {
-    showTab(tabName);
+export function handleTabChange(tabName, event = null) {
+    // 클릭한 버튼 찾기
+    let clickedTab = null;
+    if (event && event.target) {
+        clickedTab = event.target.closest('.nav-tab');
+    } else {
+        // onclick 핸들러에서 호출된 경우, 모든 탭 버튼을 확인
+        const tabs = document.querySelectorAll('.nav-tab');
+        tabs.forEach(tab => {
+            const onclick = tab.getAttribute('onclick');
+            if (onclick && (onclick.includes(`'${tabName}'`) || onclick.includes(`"${tabName}"`))) {
+                clickedTab = tab;
+            }
+        });
+    }
+    
+    showTab(tabName, clickedTab);
     
     // 부서원 관리 탭일 경우 목록 새로고침
     if (tabName === 'members') {
