@@ -177,4 +177,3 @@ export function validateArchetypeCombination(primary, secondary) {
         errors
     };
 }
-

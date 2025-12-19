@@ -223,4 +223,3 @@ export function sortMembers(members) {
         return (b.years || 0) - (a.years || 0);
     });
 }
-

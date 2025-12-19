@@ -471,13 +471,13 @@
         </header>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('overview')">개요</button>
-            <button class="nav-tab" onclick="showTab('members')">부서원 관리</button>
-            <button class="nav-tab" onclick="showTab('levels')">연차별 역량</button>
-            <button class="nav-tab" onclick="showTab('archetypes')">성향 트랙</button>
-            <button class="nav-tab" onclick="showTab('mentoring')">면담 가이드</button>
-            <button class="nav-tab" onclick="showTab('tracks')">트랙 비교</button>
-            <button class="nav-tab" onclick="showTab('evaluation')">평가 기준</button>
+            <button class="nav-tab active" onclick="handleTabChange('overview')">개요</button>
+            <button class="nav-tab" onclick="handleTabChange('members')">부서원 관리</button>
+            <button class="nav-tab" onclick="handleTabChange('levels')">연차별 역량</button>
+            <button class="nav-tab" onclick="handleTabChange('archetypes')">성향 트랙</button>
+            <button class="nav-tab" onclick="handleTabChange('mentoring')">면담 가이드</button>
+            <button class="nav-tab" onclick="handleTabChange('tracks')">트랙 비교</button>
+            <button class="nav-tab" onclick="handleTabChange('evaluation')">평가 기준</button>
         </div>
 
         <!-- 개요 탭 -->
@@ -884,7 +884,7 @@
                 <!-- 등록 폼 -->
                 <div class="form-container">
                     <h3 style="margin-top: 0; margin-bottom: 20px; color: #667eea;">부서원 등록</h3>
-                    <form id="memberForm" onsubmit="saveMember(event)">
+                    <form id="memberForm">
                         <div class="form-group">
                             <label for="memberName">이름 *</label>
                             <input type="text" id="memberName" required placeholder="이름을 입력하세요">
@@ -1007,157 +1007,19 @@
         </div>
     </div>
 
-    <script>
-        // 로컬 스토리지에서 부서원 데이터 관리
-        const STORAGE_KEY = 'ecgf_members';
+    <script type="module">
+        import { init, saveMember, resetForm, editMember, removeMember } from './src/app.js';
+        import { handleTabChange } from './src/app.js';
         
-        function getMembers() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
-        }
+        // 전역 함수로 노출 (onclick 핸들러용)
+        window.handleTabChange = handleTabChange;
+        window.saveMember = saveMember;
+        window.resetForm = resetForm;
+        window.editMember = editMember;
+        window.deleteMember = removeMember;
         
-        function saveMembers(members) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
-        }
-        
-        function showTab(tabName) {
-            // 모든 탭과 콘텐츠 숨기기
-            const tabs = document.querySelectorAll('.nav-tab');
-            const contents = document.querySelectorAll('.content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            // 선택한 탭과 콘텐츠 활성화
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-            
-            // 부서원 관리 탭일 경우 목록 새로고침
-            if (tabName === 'members') {
-                renderMemberList();
-            }
-        }
-        
-        function saveMember(event) {
-            event.preventDefault();
-            
-            const members = getMembers();
-            const editId = document.getElementById('editId').value;
-            const memberData = {
-                id: editId || Date.now().toString(),
-                name: document.getElementById('memberName').value,
-                primaryArchetype: document.getElementById('primaryArchetype').value,
-                secondaryArchetype: document.getElementById('secondaryArchetype').value,
-                years: parseInt(document.getElementById('years').value),
-                level: document.getElementById('level').value
-            };
-            
-            if (editId) {
-                // 수정
-                const index = members.findIndex(m => m.id === editId);
-                if (index !== -1) {
-                    members[index] = memberData;
-                }
-            } else {
-                // 추가
-                members.push(memberData);
-            }
-            
-            saveMembers(members);
-            resetForm();
-            renderMemberList();
-        }
-        
-        function resetForm() {
-            document.getElementById('memberForm').reset();
-            document.getElementById('editId').value = '';
-        }
-        
-        function editMember(id) {
-            const members = getMembers();
-            const member = members.find(m => m.id === id);
-            
-            if (member) {
-                document.getElementById('editId').value = member.id;
-                document.getElementById('memberName').value = member.name;
-                document.getElementById('primaryArchetype').value = member.primaryArchetype;
-                document.getElementById('secondaryArchetype').value = member.secondaryArchetype || '';
-                document.getElementById('years').value = member.years;
-                document.getElementById('level').value = member.level;
-                
-                // 부서원 관리 탭으로 스크롤
-                document.getElementById('members').scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-        
-        function deleteMember(id) {
-            if (confirm('정말 삭제하시겠습니까?')) {
-                const members = getMembers();
-                const filtered = members.filter(m => m.id !== id);
-                saveMembers(filtered);
-                renderMemberList();
-            }
-        }
-        
-        function renderMemberList() {
-            const members = getMembers();
-            const listContainer = document.getElementById('memberList');
-            
-            if (members.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="empty-state">
-                        <h3>등록된 부서원이 없습니다</h3>
-                        <p>위의 폼을 사용하여 부서원을 등록해주세요.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // 레벨별로 정렬
-            const levelOrder = { 'L1': 1, 'L2': 2, 'L3': 3, 'L4': 4, 'L5': 5 };
-            members.sort((a, b) => {
-                const levelDiff = (levelOrder[b.level] || 0) - (levelOrder[a.level] || 0);
-                if (levelDiff !== 0) return levelDiff;
-                return b.years - a.years;
-            });
-            
-            listContainer.innerHTML = members.map(member => `
-                <div class="member-card">
-                    <div class="member-header">
-                        <div class="member-name">${member.name}</div>
-                        <div class="action-buttons">
-                            <button class="btn btn-secondary btn-small" onclick="editMember('${member.id}')">수정</button>
-                            <button class="btn btn-danger btn-small" onclick="deleteMember('${member.id}')">삭제</button>
-                        </div>
-                    </div>
-                    <div class="member-info">
-                        <div class="info-item">
-                            <span class="info-label">업무 레벨:</span>
-                            <span class="badge badge-level">${member.level}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">근무 연차:</span>
-                            <span class="badge badge-years">${member.years}년</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">주요 성향:</span>
-                            <span class="badge badge-archetype">${member.primaryArchetype}</span>
-                        </div>
-                        ${member.secondaryArchetype ? `
-                        <div class="info-item">
-                            <span class="info-label">보조 성향:</span>
-                            <span class="badge badge-archetype">${member.secondaryArchetype}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // 페이지 로드 시 부서원 목록 렌더링
-        window.addEventListener('DOMContentLoaded', function() {
-            renderMemberList();
-        });
+        // 애플리케이션 초기화
+        init();
     </script>
 </body>
 </html>
