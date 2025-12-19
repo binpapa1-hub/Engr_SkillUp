@@ -1,0 +1,26 @@
+{
+  "name": "ecgf",
+  "version": "1.0.0",
+  "description": "Engineering Capability Growth Framework",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest run"
+  },
+  "keywords": [
+    "engineering",
+    "capability",
+    "growth",
+    "framework"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "jsdom": "^27.3.0",
+    "vitest": "^1.0.0"
+  }
+}
