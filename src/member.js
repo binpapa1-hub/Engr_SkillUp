@@ -154,7 +154,7 @@ export function getMemberById(id) {
 /**
  * 부서원 정보를 수정합니다.
  * @param {string} id - 부서원 ID
- * @param {Object} memberData - 수정할 부서원 데이터
+ * @param {Object} memberData - 수정할 부서원 데이터 (부분 업데이트 가능)
  * @returns {Object} 수정된 부서원 객체
  * @throws {Error} 부서원을 찾을 수 없거나 데이터가 유효하지 않을 때
  */
@@ -166,19 +166,24 @@ export function updateMember(id, memberData) {
         throw new Error(`ID가 ${id}인 부서원을 찾을 수 없습니다.`);
     }
     
-    // 기존 ID 유지하면서 데이터 업데이트
-    const updatedData = { ...memberData, id };
-    const member = createMember(updatedData);
+    // 기존 멤버 데이터를 유지하면서 제공된 필드만 업데이트
+    const existingMember = members[index];
+    const updatedData = { ...existingMember, ...memberData, id };
     
-    members[index] = member;
+    // 업데이트된 데이터 검증
+    validateMember(updatedData);
+    
+    // 멤버 객체 업데이트
+    members[index] = updatedData;
     saveMembers(members);
     
-    return member;
+    return updatedData;
 }
 
 /**
  * 부서원을 삭제합니다.
  * @param {string} id - 부서원 ID
+ * @returns {boolean} 삭제 성공 여부
  * @throws {Error} 부서원을 찾을 수 없을 때
  */
 export function removeMember(id) {
@@ -191,6 +196,8 @@ export function removeMember(id) {
     
     members.splice(index, 1);
     saveMembers(members);
+    
+    return true;
 }
 
 /**
