@@ -178,15 +178,34 @@ npx http-server -p 8000
 > **TDD Red 단계**: 실패하는 테스트를 먼저 작성하는 단계입니다.  
 > 아래 목록은 report 폴더의 기능 명세서와 구현 상세 보고서를 기반으로 작성되었습니다.
 
-### 1. 테스트 환경 설정 (최우선) 🔴
-- [ ] 테스트 프레임워크 선택 및 설치
-  - [ ] Jest 또는 Vitest 설치 (Vanilla JS 프로젝트에 적합)
-  - [ ] `package.json` 생성 및 테스트 스크립트 설정
-  - [ ] 테스트 디렉토리 구조 생성 (`tests/` 또는 `__tests__/`)
-- [ ] 테스트 실행 환경 구성
-  - [ ] `npm test` 또는 `yarn test` 명령어 설정
-  - [ ] 테스트 커버리지 도구 설정 (Jest Coverage 또는 c8)
-  - [ ] CI/CD 파이프라인에 테스트 단계 추가 (선택사항)
+### 1. 테스트 환경 설정 (최우선) ✅
+- [x] 테스트 프레임워크 선택 및 설치
+  - [x] Jest 또는 Vitest 설치 (Vanilla JS 프로젝트에 적합) - **✅ Vitest v1.6.1 설치 완료**
+  - [x] `package.json` 생성 및 테스트 스크립트 설정 - **✅ 완료**
+  - [x] 테스트 디렉토리 구조 생성 (`tests/` 또는 `__tests__/`) - **✅ tests/ 디렉토리 생성 완료**
+- [x] 테스트 실행 환경 구성
+  - [x] `npm test` 또는 `yarn test` 명령어 설정 - **✅ npm test 설정 완료 (12개 테스트 통과)**
+  - [x] 테스트 커버리지 도구 설정 (Jest Coverage 또는 c8) - **✅ Vitest Coverage v8 설정 완료 (100% 커버리지)**
+  - [ ] CI/CD 파이프라인에 테스트 단계 추가 (선택사항) - **가이드라인 참고**
+
+**설정 완료 요약:**
+- ✅ Vitest 프레임워크 설치 및 설정
+- ✅ `package.json`에 테스트 스크립트 추가 (`test`, `test:ui`, `test:coverage`, `test:run`)
+- ✅ `vitest.config.js` 설정 파일 생성 (jsdom 환경, 커버리지 설정)
+- ✅ `tests/` 디렉토리 생성 및 테스트 파일 작성
+- ✅ 테스트 실행 확인: 12개 테스트 모두 통과
+- ✅ 커버리지 확인: 100% 커버리지 달성
+
+**사용 가능한 명령어:**
+```bash
+npm test              # 테스트 실행 (watch 모드)
+npm run test:run      # 테스트 실행 (한 번만)
+npm run test:ui       # 테스트 UI 실행
+npm run test:coverage # 커버리지 리포트 생성
+```
+
+**CI/CD 설정 가이드라인 (선택사항):**
+GitHub Actions를 사용하는 경우 `.github/workflows/test.yml` 파일을 생성하여 자동 테스트를 설정할 수 있습니다.
 
 ### 2. 부서원 관리 시스템 테스트 (현재 구현 기능) 🔴
 - [ ] 부서원 데이터 모델 실패 테스트
