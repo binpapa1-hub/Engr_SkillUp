@@ -451,14 +451,26 @@ GitHub Actions를 사용하는 경우 `.github/workflows/test.yml` 파일을 생
 - ✅ `safeJSONStringify()` - 안전한 JSON 직렬화
 - ✅ **274개 테스트 모두 통과** (29개 에러 핸들링 테스트 추가, 100% 통과율)
 
-### 12. 성능 및 확장성 테스트 🔴
-- [ ] 대량 데이터 처리 실패 테스트
-  - [ ] 100명 이상 부서원 데이터 로드 성능
-  - [ ] 목록 렌더링 성능 (가상 스크롤 필요 여부)
-  - [ ] 검색/필터링 성능 (대량 데이터)
-- [ ] 메모리 관리 실패 테스트
-  - [ ] 데이터 누수 검증
-  - [ ] 이벤트 리스너 정리 검증
+### 12. 성능 및 확장성 테스트 ✅
+- [x] 대량 데이터 처리 실패 테스트
+  - [x] 100명 이상 부서원 데이터 로드 성능 - **✅ generateLargeDataset(), loadMembersPerformance() 구현 완료**
+  - [x] 목록 렌더링 성능 (가상 스크롤 필요 여부) - **✅ renderListPerformance() 구현 완료**
+  - [x] 검색/필터링 성능 (대량 데이터) - **✅ searchPerformance(), filterPerformance() 구현 완료**
+- [x] 메모리 관리 실패 테스트
+  - [x] 데이터 누수 검증 - **✅ checkMemoryLeak() 구현 완료**
+  - [x] 이벤트 리스너 정리 검증 - **✅ cleanupEventListeners() 구현 완료**
+
+**구현 완료 요약:**
+- ✅ `generateLargeDataset()` - 대량 테스트 데이터 생성 (100~1000명)
+- ✅ `loadMembersPerformance()` - 데이터 로드 성능 측정
+- ✅ `renderListPerformance()` - 목록 렌더링 성능 측정 및 가상 스크롤 필요 여부 판단
+- ✅ `searchPerformance()` - 검색 성능 측정
+- ✅ `filterPerformance()` - 필터링 성능 측정
+- ✅ `checkMemoryLeak()` - 메모리 누수 검증
+- ✅ `cleanupEventListeners()` - 이벤트 리스너 정리
+- ✅ `measurePerformance()` - 함수 실행 성능 측정 유틸리티
+- ✅ `PERFORMANCE_THRESHOLDS` - 성능 임계값 설정
+- ✅ **292개 테스트 모두 통과** (18개 성능 테스트 추가, 100% 통과율)
 
 ### 13. 통합 테스트 시나리오 🔴
 - [ ] 엔드투엔드 워크플로우 실패 테스트
