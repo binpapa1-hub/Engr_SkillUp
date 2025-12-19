@@ -1,5 +1,5 @@
 # KPT 브랜치 생성 및 체크아웃
-_Exported on 12/19/2025 at 14:16:07 GMT+9 from Cursor (2.2.20)_
+_Exported on 12/19/2025 at 14:18:11 GMT+9 from Cursor (2.2.20)_
 
 ---
 
@@ -632,5 +632,48 @@ KPT 브랜치의 변경사항이 GitHub에 반영되었습니다.
 
 ```plaintext
 https://github.com/binpapa1-hub/Engr_SkillUp/pull/new/KPT
+```
+
+---
+
+**User**
+
+github에 업로드 해줘
+
+---
+
+**Cursor**
+
+
+현재 상태 확인 후 필요한 변경사항을 GitHub에 푸시합니다.
+
+
+
+추적되지 않은 파일이 있습니다. 추가 후 커밋하고 푸시합니다.
+
+
+
+GitHub 업로드 완료.
+
+## 업로드된 내용
+
+- **브랜치**: `KPT`
+- **새로 추가된 파일**: `Prompting/Prompt_kpt.md`
+- **상태**: 푸시 완료
+
+## 현재 KPT 브랜치 상태
+
+모든 변경사항이 GitHub에 반영되었습니다:
+- KPT 회고 보고서
+- 리팩토링 작업 보고서
+- KPT 프롬프트 파일
+
+원격 저장소에서 확인할 수 있습니다:
+```
+https://github.com/binpapa1-hub/Engr_SkillUp/tree/KPT
+```
+
+```plaintext
+https://github.com/binpapa1-hub/Engr_SkillUp/tree/KPT
 ```
 
