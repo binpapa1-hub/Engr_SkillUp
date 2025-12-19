@@ -4,10 +4,26 @@ export const STORAGE_KEY = 'ecgf_members';
 /**
  * 로컬 스토리지에서 부서원 목록을 가져옵니다.
  * @returns {Array} 부서원 배열
+ * @throws {Error} 잘못된 JSON 데이터이거나 배열이 아닌 경우
  */
 export function getMembers() {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    if (!data) {
+        return [];
+    }
+    
+    try {
+        const parsed = JSON.parse(data);
+        if (!Array.isArray(parsed)) {
+            throw new Error('데이터는 배열 형식이어야 합니다.');
+        }
+        return parsed;
+    } catch (error) {
+        if (error.message === '데이터는 배열 형식이어야 합니다.') {
+            throw error;
+        }
+        throw new Error('잘못된 JSON 데이터 형식입니다.');
+    }
 }
 
 /**

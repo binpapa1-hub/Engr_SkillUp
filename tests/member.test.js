@@ -515,5 +515,178 @@ describe('부서원 데이터 관리', () => {
             expect(sorted[3].years).toBe(5);
         });
     });
+
+    // ============================================
+    // 로컬 스토리지 데이터 관리 테스트 (Red 단계)
+    // ============================================
+    describe('로컬 스토리지 데이터 저장/로드', () => {
+        describe('getMembers() - 데이터 로드', () => {
+            it('빈 스토리지에서 빈 배열을 반환해야 함', () => {
+                const members = getMembers();
+                expect(members).toEqual([]);
+                expect(localStorage.getItem).toHaveBeenCalledWith(STORAGE_KEY);
+            });
+
+            it('스토리지 키 ecgf_members를 사용해야 함', () => {
+                getMembers();
+                expect(localStorage.getItem).toHaveBeenCalledWith(STORAGE_KEY);
+                expect(STORAGE_KEY).toBe('ecgf_members');
+            });
+
+            it('저장된 데이터를 올바르게 파싱하여 반환해야 함', () => {
+                const testData = [
+                    { id: '1', name: '홍길동', primaryArchetype: '문제 해결형', years: 5, level: 'L2' }
+                ];
+                localStorageMock.setItem(STORAGE_KEY, JSON.stringify(testData));
+                
+                const members = getMembers();
+                expect(members).toEqual(testData);
+            });
+
+            it('잘못된 JSON 데이터 처리 시 에러를 발생시켜야 함', () => {
+                localStorageMock.setItem(STORAGE_KEY, 'invalid json');
+                
+                expect(() => getMembers()).toThrow();
+            });
+
+            it('스토리지에 키가 없는 경우 빈 배열을 반환해야 함', () => {
+                // clear() 후에는 키가 없으므로 null 반환
+                localStorageMock.clear();
+                const members = getMembers();
+                expect(members).toEqual([]);
+            });
+        });
+
+        describe('saveMembers() - 데이터 저장', () => {
+            it('부서원 배열을 JSON으로 직렬화하여 저장해야 함', () => {
+                const members = [
+                    { id: '1', name: '홍길동', primaryArchetype: '문제 해결형', years: 5, level: 'L2' }
+                ];
+                
+                saveMembers(members);
+                
+                expect(localStorage.setItem).toHaveBeenCalledWith(
+                    STORAGE_KEY,
+                    JSON.stringify(members)
+                );
+            });
+
+            it('스토리지 키 ecgf_members를 사용해야 함', () => {
+                const members = [
+                    { id: '1', name: '홍길동', primaryArchetype: '문제 해결형', years: 5, level: 'L2' }
+                ];
+                
+                saveMembers(members);
+                
+                expect(localStorage.setItem).toHaveBeenCalledWith(
+                    STORAGE_KEY,
+                    expect.any(String)
+                );
+                expect(STORAGE_KEY).toBe('ecgf_members');
+            });
+
+            it('빈 배열도 저장할 수 있어야 함', () => {
+                saveMembers([]);
+                
+                expect(localStorage.setItem).toHaveBeenCalledWith(STORAGE_KEY, '[]');
+            });
+
+            it('JSON 직렬화/역직렬화가 정확해야 함', () => {
+                const members = [
+                    { id: '1', name: '홍길동', primaryArchetype: '문제 해결형', years: 5, level: 'L2' },
+                    { id: '2', name: '김철수', primaryArchetype: '설계/아키텍처형', years: 10, level: 'L3', secondaryArchetype: '문제 해결형' }
+                ];
+                
+                saveMembers(members);
+                const savedData = localStorageMock.getItem(STORAGE_KEY);
+                const parsed = JSON.parse(savedData);
+                
+                expect(parsed).toEqual(members);
+                expect(parsed.length).toBe(2);
+            });
+        });
+    });
+
+    describe('데이터 검증 및 에러 처리', () => {
+        describe('필수 필드 누락 검증', () => {
+            it('배열이 아닌 데이터 형식 처리 - 객체인 경우 에러 발생해야 함', () => {
+                localStorageMock.setItem(STORAGE_KEY, JSON.stringify({ id: '1', name: '홍길동' }));
+                
+                expect(() => {
+                    const members = getMembers();
+                    if (!Array.isArray(members)) {
+                        throw new Error('데이터는 배열 형식이어야 합니다.');
+                    }
+                }).toThrow('데이터는 배열 형식이어야 합니다.');
+            });
+
+            it('배열이 아닌 데이터 형식 처리 - 문자열인 경우 에러 발생해야 함', () => {
+                localStorageMock.setItem(STORAGE_KEY, JSON.stringify('invalid'));
+                
+                expect(() => {
+                    const members = getMembers();
+                    if (!Array.isArray(members)) {
+                        throw new Error('데이터는 배열 형식이어야 합니다.');
+                    }
+                }).toThrow('데이터는 배열 형식이어야 합니다.');
+            });
+
+            it('배열이 아닌 데이터 형식 처리 - 숫자인 경우 에러 발생해야 함', () => {
+                localStorageMock.setItem(STORAGE_KEY, JSON.stringify(123));
+                
+                expect(() => {
+                    const members = getMembers();
+                    if (!Array.isArray(members)) {
+                        throw new Error('데이터는 배열 형식이어야 합니다.');
+                    }
+                }).toThrow('데이터는 배열 형식이어야 합니다.');
+            });
+        });
+
+        describe('데이터 타입 불일치 처리', () => {
+            it('부서원 데이터에 필수 필드가 누락된 경우 검증 실패해야 함', () => {
+                const invalidMembers = [
+                    { id: '1', name: '홍길동' }, // primaryArchetype, years, level 누락
+                    { id: '2', primaryArchetype: '문제 해결형' } // name, years, level 누락
+                ];
+                
+                localStorageMock.setItem(STORAGE_KEY, JSON.stringify(invalidMembers));
+                const members = getMembers();
+                
+                // validateMember로 검증
+                const result1 = validateMember(members[0]);
+                const result2 = validateMember(members[1]);
+                
+                expect(result1.valid).toBe(false);
+                expect(result2.valid).toBe(false);
+            });
+
+            it('연차가 숫자가 아닌 경우 검증 실패해야 함', () => {
+                const invalidMember = {
+                    name: '홍길동',
+                    primaryArchetype: '문제 해결형',
+                    years: '5', // 문자열
+                    level: 'L2'
+                };
+                
+                const result = validateMember(invalidMember);
+                expect(result.valid).toBe(false);
+                expect(result.errors).toContain('근무 연차는 0~50년 사이의 숫자여야 합니다.');
+            });
+
+            it('레벨이 유효하지 않은 경우 검증 실패해야 함', () => {
+                const invalidMember = {
+                    name: '홍길동',
+                    primaryArchetype: '문제 해결형',
+                    years: 5,
+                    level: 'L6' // 잘못된 레벨
+                };
+                
+                const result = validateMember(invalidMember);
+                expect(result.valid).toBe(false);
+                expect(result.errors).toContain('업무 레벨은 L1~L5 중 하나여야 합니다.');
+            });
+        });
+    });
 });
 
