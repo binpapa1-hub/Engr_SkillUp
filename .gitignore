@@ -28,3 +28,7 @@ desktop.ini
 *.tmp
 *.temp
 
+# Node.js
+node_modules/
+coverage/
+
